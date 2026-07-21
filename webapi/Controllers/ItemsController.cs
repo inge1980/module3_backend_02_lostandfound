@@ -97,4 +97,34 @@ public class ItemsController(IItemService service) : ControllerBase
         return Ok(item);
     }
 
+    /// <summary>
+    /// Hent et element basert på id og merk det som returnert.
+    /// </summary>
+    [HttpPost("{id}/return")]
+    [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Return(Guid id)
+    {
+        var item = await service.GetByIdAsync(id);
+
+        if (item == null)
+            return NotFound();
+
+        try
+        {
+            item.Return();
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict();
+        }
+
+        return Ok(item);
+    }
+
+
+    // DELETE
+    // GET filtering
+
 }
