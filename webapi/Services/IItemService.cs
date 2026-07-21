@@ -15,4 +15,6 @@ public interface IItemService
     Task<Item> CreateAsync(Item item);
 
     Task DeleteAsync(Item item);
+
+    Task UpdateAsync(Item item);
 }

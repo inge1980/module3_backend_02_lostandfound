@@ -54,4 +54,18 @@ public class InMemoryItemRepository : IItemRepository
         }
         return Task.CompletedTask;
     }
+
+    public Task UpdateAsync(Item item)
+    {
+        var existing = items.FirstOrDefault(i => i.Id == item.Id);
+
+        if (existing != null)
+        {
+            items.Remove(existing);
+            items.Add(item);
+        }
+
+        return Task.CompletedTask;
+    }
+
 }

@@ -35,4 +35,9 @@ public class ItemService : IItemService
         item.EnsureCanDelete();
         return _repository.DeleteAsync(item);
     }
+
+    public Task UpdateAsync(Item item)
+    {
+        return _repository.UpdateAsync(item);
+    }
 }

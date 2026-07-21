@@ -95,6 +95,7 @@ public class ItemsController(IItemService service) : ControllerBase
         try
         {
             item.Claim(request.ClaimedBy);
+            await service.UpdateAsync(item);
         }
         catch (InvalidOperationException)
         {
@@ -120,6 +121,7 @@ public class ItemsController(IItemService service) : ControllerBase
         try
         {
             item.Return();
+            await service.UpdateAsync(item);
         }
         catch (InvalidOperationException)
         {

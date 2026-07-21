@@ -15,4 +15,6 @@ public interface IItemRepository
     Task<Item> AddAsync(Item item);
 
     Task DeleteAsync(Item item);
+
+    Task UpdateAsync(Item item);
 }
