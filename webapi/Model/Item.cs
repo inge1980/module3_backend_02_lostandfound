@@ -29,4 +29,39 @@ public class Item
         //FoundAtUtc = DateTime.UtcNow;
         //Status = ItemStatus.Available;
     }
+
+    // Changes in status
+    public void Claim(string claimedBy)
+    {
+        if (Status != ItemStatus.Available)
+        {
+            throw new InvalidOperationException(
+                "Only available items can be claimed");
+        }
+
+        Status = ItemStatus.Claimed;
+        ClaimedBy = claimedBy;
+        ClaimedAtUtc = DateTime.UtcNow;
+    }
+
+    public void Return()
+    {
+        if (Status != ItemStatus.Claimed)
+        {
+            throw new InvalidOperationException(
+                "Only claimed items can be returned");
+        }
+
+        Status = ItemStatus.Returned;
+        ReturnedAtUtc = DateTime.UtcNow;
+    }
+    
+    public void EnsureCanDelete()
+    {
+        if (Status != ItemStatus.Available)
+        {
+            throw new InvalidOperationException(
+                "Only available items can be deleted");
+        }
+    }
 }
