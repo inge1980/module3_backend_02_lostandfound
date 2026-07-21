@@ -107,7 +107,6 @@ public class ItemsController(IItemService service) : ControllerBase
     public async Task<IActionResult> Return(Guid id)
     {
         var item = await service.GetByIdAsync(id);
-
         if (item == null)
             return NotFound();
 
@@ -119,12 +118,33 @@ public class ItemsController(IItemService service) : ControllerBase
         {
             return Conflict();
         }
-
         return Ok(item);
     }
 
+    /// <summary>
+    /// Slett et element basert på id.
+    /// </summary>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var item = await service.GetByIdAsync(id);
+        if (item == null)
+            return NotFound();
 
-    // DELETE
+        try
+        {
+            await service.DeleteAsync(item);
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict();
+        }
+        return NoContent();
+    }
+
     // GET filtering
 
 }

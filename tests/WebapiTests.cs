@@ -121,6 +121,30 @@ public class WebapiTests
         Assert.IsType<OkObjectResult>(result);
     }
 
+    [Fact]
+    public async Task Delete_available_item_returns_204()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+        var item = CreateAvailableItem();
+        await repository.AddAsync(item);
+        var result = await controller.Delete(item.Id);
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task Delete_claimed_item_returns_409()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+        var item = CreateClaimedItem();
+        await repository.AddAsync(item);
+        var result = await controller.Delete(item.Id);
+        Assert.IsType<ConflictResult>(result);
+    }
+
     private Item CreateAvailableItem()
     {
         return new Item

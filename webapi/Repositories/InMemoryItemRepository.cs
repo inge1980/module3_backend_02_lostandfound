@@ -31,8 +31,9 @@ public class InMemoryItemRepository : IItemRepository
 
     public Task DeleteAsync(Item item)
     {
-        items.Remove(item);
-
+        if(items.Contains(item)) {
+            items.Remove(item);
+        }
         return Task.CompletedTask;
     }
 }
