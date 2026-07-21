@@ -12,9 +12,9 @@ public class Item
 
     public string FoundLocation { get; set; } = string.Empty;
 
-    public DateTime FoundAtUtc { get; set; }
+    public DateTime FoundAtUtc { get; private set; }
 
-    public ItemStatus Status { get; set; }
+    public ItemStatus Status { get; private set; }
 
     public string ClaimedBy { get; set; } = string.Empty;
 

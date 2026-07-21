@@ -13,8 +13,6 @@ public class ItemService : IItemService
             Description = "Found during cleaning up the park",
             Category = "Other",
             FoundLocation = "Park",
-            FoundAtUtc = DateTime.UtcNow.AddDays(-5),
-            Status = ItemStatus.Available,
             ClaimedBy = string.Empty,
             ClaimedAtUtc = null,
             ReturnedAtUtc = null
@@ -25,8 +23,6 @@ public class ItemService : IItemService
             Description = "Found during a busy day at the mall",
             Category = "Other",
             FoundLocation = "Park",
-            FoundAtUtc = DateTime.UtcNow.AddDays(-5),
-            Status = ItemStatus.Returned,
             ClaimedBy = "Jane Doe",
             ClaimedAtUtc = DateTime.UtcNow.AddDays(-3),
             ReturnedAtUtc = DateTime.UtcNow.AddDays(-1)
@@ -37,8 +33,6 @@ public class ItemService : IItemService
             Description = "Found during a long road trip",
             Category = "Other",
             FoundLocation = "Park",
-            FoundAtUtc = DateTime.UtcNow.AddDays(-5),
-            Status = ItemStatus.Claimed,
             ClaimedBy = "John Doe",
             ClaimedAtUtc = DateTime.UtcNow.AddDays(-1),
             ReturnedAtUtc = null
@@ -61,7 +55,6 @@ public class ItemService : IItemService
 
     public Task<Item> CreateAsync(Item item)
     {
-        item.FoundAtUtc = DateTime.UtcNow;
         items.Add(item);
         return Task.FromResult(item);
     }
