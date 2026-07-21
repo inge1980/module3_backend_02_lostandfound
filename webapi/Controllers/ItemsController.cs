@@ -10,7 +10,7 @@ public class ItemsController(IItemService service) : ControllerBase
 {
 
     /// <summary>
-    /// Henter alle oppgaver.
+    /// Henter alle elementer.
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Item>), StatusCodes.Status200OK)]

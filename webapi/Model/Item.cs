@@ -1,21 +1,8 @@
 namespace webapi.Model;
 
-/*
-Id (Guid)
-Title (kort tittel, f.eks. ?Svart lommebok?)
-Description (valgfri)
-Category (f.eks. ?Keys?, ?Wallet?, ?Clothing?, ?Other? ? kan være string eller enum)
-FoundLocation (f.eks. ?Inngang A?)
-FoundAtUtc (DateTime, UTC)
-Status (enum)
-ClaimedBy (valgfri string)
-ClaimedAtUtc (valgfri DateTime)
-ReturnedAtUtc (valgfri DateTime)
-*/
-
 public class Item
 {
-    public int Id { get; set; }
+    public Guid Id { get; private set; }
 
     public string Title { get; set; } = string.Empty;
 
@@ -35,4 +22,11 @@ public class Item
 
     public DateTime? ReturnedAtUtc { get; set; }
     
+    // Initializes a new instance with default values.
+    public Item()
+    {
+        Id = Guid.NewGuid();
+        //FoundAtUtc = DateTime.UtcNow;
+        //Status = ItemStatus.Available;
+    }
 }
