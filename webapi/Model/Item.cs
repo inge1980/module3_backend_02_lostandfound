@@ -14,7 +14,7 @@ public class Item
 
     public DateTime FoundAtUtc { get; set; }
 
-    public ItemStatus Status { get; set; } = ItemStatus.Available;
+    public ItemStatus Status { get; set; }
 
     public string ClaimedBy { get; set; } = string.Empty;
 
@@ -27,7 +27,7 @@ public class Item
     {
         Id = Guid.NewGuid();
         FoundAtUtc = DateTime.UtcNow;
-        //Status = ItemStatus.Available;
+        Status = ItemStatus.Available;
     }
 
     // Changes in status
