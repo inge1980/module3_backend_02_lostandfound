@@ -4,7 +4,11 @@ namespace webapi.Services;
 
 public interface IItemService
 {
-    Task<IEnumerable<Item>> GetAllAsync();
+    Task<IEnumerable<Item>> GetAllAsync(
+        ItemStatus? status = null,
+        string? category = null,
+        string? q = null
+    );
 
     Task<Item?> GetByIdAsync(Guid id);
 

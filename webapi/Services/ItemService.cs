@@ -12,9 +12,12 @@ public class ItemService : IItemService
         _repository = repository;
     }
 
-    public Task<IEnumerable<Item>> GetAllAsync()
+    public Task<IEnumerable<Item>> GetAllAsync(
+        ItemStatus? status = null,
+        string? category = null,
+        string? q = null)
     {
-        return _repository.GetAllAsync();
+        return _repository.GetAllAsync(status, category, q);
     }
 
     public Task<Item?> GetByIdAsync(Guid id)

@@ -89,6 +89,25 @@ public class WebapiTests
     }
 
     [Fact]
+    public async Task Can_filter_items_by_status()
+    {
+        var repository = new InMemoryItemRepository();
+        var available = new Item();
+        var claimed = new Item();
+        claimed.Claim("Ola");
+        await repository.AddAsync(available);
+        await repository.AddAsync(claimed);
+        var result = await repository.GetAllAsync(
+            ItemStatus.Claimed
+        );
+        Assert.Single(result);
+        Assert.Equal(
+            ItemStatus.Claimed,
+            result.First().Status
+        );
+    }
+
+    [Fact]
     public async Task Create_item_returns_201()
     {
         var repository = new InMemoryItemRepository();

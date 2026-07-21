@@ -10,13 +10,20 @@ public class ItemsController(IItemService service) : ControllerBase
 {
 
     /// <summary>
-    /// Henter alle elementer.
+    /// Henter alle elementer, med mulighet for filtrering på status, kategori og søk.
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Item>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<Item>>> Get()
+    public async Task<ActionResult<IEnumerable<Item>>> Get(
+        ItemStatus? status,
+        string? category,
+        string? q)
     {
-        var items = await service.GetAllAsync();
+        var items = await service.GetAllAsync(
+            status,
+            category,
+            q
+        );
 
         return Ok(items);
     }
