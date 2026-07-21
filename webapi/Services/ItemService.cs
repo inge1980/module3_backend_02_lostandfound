@@ -1,28 +1,29 @@
 using webapi.Model;
+using webapi.Repositories;
 
 namespace webapi.Services;
 
 public class ItemService : IItemService
 {
+    private readonly IItemRepository _repository;
 
-    private readonly List<Item> items = new();
+    public ItemService(IItemRepository repository)
+    {
+        _repository = repository;
+    }
 
     public Task<IEnumerable<Item>> GetAllAsync()
     {
-        return Task.FromResult<IEnumerable<Item>>(items);
+        return _repository.GetAllAsync();
     }
-
 
     public Task<Item?> GetByIdAsync(Guid id)
     {
-        var item = items.FirstOrDefault(i => i.Id == id);
-        return Task.FromResult(item);
+        return _repository.GetByIdAsync(id);
     }
-
 
     public Task<Item> CreateAsync(Item item)
     {
-        items.Add(item);
-        return Task.FromResult(item);
+        return _repository.AddAsync(item);
     }
 }

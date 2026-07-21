@@ -3,6 +3,7 @@
 // http://localhost:5179/api/items/
 using System.Reflection;
 using webapi.Services;
+using webapi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Controllers
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IItemService, ItemService>();
+builder.Services.AddSingleton<IItemRepository, InMemoryItemRepository>();
+builder.Services.AddScoped<IItemService, ItemService>();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();

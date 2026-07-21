@@ -1,6 +1,7 @@
 ﻿using webapi.Model;
 using webapi.Services;
 using webapi.Controllers;
+using webapi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace tests;
@@ -93,7 +94,8 @@ public class WebapiTests
     [Fact]
     public async Task Create_item_returns_201()
     {
-        var service = new ItemService();
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
         var controller = new ItemsController(service);
         var request = new CreateItemRequest
         {
