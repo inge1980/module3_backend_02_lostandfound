@@ -26,7 +26,7 @@ public class Item
     public Item()
     {
         Id = Guid.NewGuid();
-        //FoundAtUtc = DateTime.UtcNow;
+        FoundAtUtc = DateTime.UtcNow;
         //Status = ItemStatus.Available;
     }
 
