@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace webapi.Controllers;
 
-[Route("api/[controller]/")]
+[Route("api/[controller]")]
 [ApiController]
 public class ItemsController(IItemService service) : ControllerBase
 {
@@ -19,6 +19,82 @@ public class ItemsController(IItemService service) : ControllerBase
         var items = await service.GetAllAsync();
 
         return Ok(items);
+    }
+
+    /// <summary>
+    /// Henter ett element basert på id.
+    /// </summary>
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var item = await service.GetByIdAsync(id);
+
+        if (item == null)
+            return NotFound();
+
+        return Ok(item);
+    }
+
+    /// <summary>
+    /// Oppretter et nytt element.
+    /// </summary>
+    [HttpPost]
+    [ProducesResponseType(typeof(Item), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Create(CreateItemRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Title))
+            return BadRequest();
+
+        if (request.Title.Length > 80)
+            return BadRequest();
+
+
+        var item = new Item
+        {
+            Title = request.Title,
+            Description = request.Description,
+            Category = request.Category,
+            FoundLocation = request.FoundLocation
+        };
+
+
+        var created = await service.CreateAsync(item);
+
+
+        return CreatedAtAction(
+            nameof(GetById),
+            new { id = created.Id },
+            created);
+    }
+
+    /// <summary>
+    /// Hent et element basert på id og merk det som hentet av en person.
+    /// </summary>
+    [HttpPost("{id}/claim")]
+    [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Claim(Guid id, ClaimItemRequest request)
+    {
+        var item = await service.GetByIdAsync(id);
+
+        if (item == null)
+            return NotFound();
+
+        try
+        {
+            item.Claim(request.ClaimedBy);
+        }
+        catch (InvalidOperationException)
+        {
+            return Conflict();
+        }
+
+        return Ok(item);
     }
 
 }
