@@ -10,7 +10,7 @@ public class ItemsController(IItemService service) : ControllerBase
 {
 
     /// <summary>
-    /// Henter alle elementer, med mulighet for filtrering på status, kategori og søk.
+    /// Henter alle elementer, med mulighet for filtrering pÃ¥ status, kategori og sÃ¸k.
     /// </summary>
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<Item>), StatusCodes.Status200OK)]
@@ -29,7 +29,7 @@ public class ItemsController(IItemService service) : ControllerBase
     }
 
     /// <summary>
-    /// Henter ett element basert på id.
+    /// Henter ett element basert pÃ¥ id.
     /// </summary>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
@@ -78,7 +78,7 @@ public class ItemsController(IItemService service) : ControllerBase
     }
 
     /// <summary>
-    /// Hent et element basert på id og merk det som hentet av en person.
+    /// Hent et element basert pÃ¥ id og merk det som hentet av en person.
     /// </summary>
     [HttpPost("{id}/claim")]
     [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
@@ -106,7 +106,7 @@ public class ItemsController(IItemService service) : ControllerBase
     }
 
     /// <summary>
-    /// Hent et element basert på id og merk det som returnert.
+    /// Hent et element basert pÃ¥ id og merk det som returnert.
     /// </summary>
     [HttpPost("{id}/return")]
     [ProducesResponseType(typeof(Item), StatusCodes.Status200OK)]
@@ -131,7 +131,7 @@ public class ItemsController(IItemService service) : ControllerBase
     }
 
     /// <summary>
-    /// Slett et element basert på id.
+    /// Slett et element basert pÃ¥ id.
     /// </summary>
     [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -153,7 +153,4 @@ public class ItemsController(IItemService service) : ControllerBase
         }
         return NoContent();
     }
-
-    // GET filtering
-
 }

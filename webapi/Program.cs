@@ -1,6 +1,10 @@
 // To use:
-// http://localhost:5179/swagger/index.html
-// http://localhost:5179/api/items/
+// if using InMemory repository:
+//      http://localhost:5179/swagger/index.html
+//      http://localhost:5179/api/items/
+// if using Postgres repository:
+//      http://localhost:8080/swagger/index.html
+//      http://localhost:8080/api/items/
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using webapi.Services;
@@ -19,7 +23,7 @@ builder.Services.AddDbContext<ItemDbContext>(options => options.UseNpgsql(
 // Controllers
 builder.Services.AddControllers();
 //builder.Services.AddSingleton<IItemRepository, InMemoryItemRepository>(); // Used InMemory repository for testing before Postgres was ready
-builder.Services.AddScoped<IItemRepository, PostgresItemRepository>();
+builder.Services.AddScoped<IItemRepository, PostgresItemRepository>(); // Use Postgres repository
 builder.Services.AddScoped<IItemService, ItemService>();
 
 // Swagger
