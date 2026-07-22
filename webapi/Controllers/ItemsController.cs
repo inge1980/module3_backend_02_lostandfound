@@ -37,7 +37,6 @@ public class ItemsController(IItemService service) : ControllerBase
     public async Task<IActionResult> GetById(Guid id)
     {
         var item = await service.GetByIdAsync(id);
-
         if (item == null)
             return NotFound();
 
@@ -57,8 +56,7 @@ public class ItemsController(IItemService service) : ControllerBase
 
         if (request.Title.Length > 80)
             return BadRequest();
-
-
+            
         var item = new Item
         {
             Title = request.Title,
@@ -66,11 +64,7 @@ public class ItemsController(IItemService service) : ControllerBase
             Category = request.Category,
             FoundLocation = request.FoundLocation
         };
-
-
         var created = await service.CreateAsync(item);
-
-
         return CreatedAtAction(
             nameof(GetById),
             new { id = created.Id },
@@ -88,20 +82,16 @@ public class ItemsController(IItemService service) : ControllerBase
     public async Task<IActionResult> Claim(Guid id, ClaimItemRequest request)
     {
         var item = await service.GetByIdAsync(id);
-
         if (item == null)
             return NotFound();
 
-        try
-        {
+        try {
             item.Claim(request.ClaimedBy);
             await service.UpdateAsync(item);
         }
-        catch (InvalidOperationException)
-        {
+        catch (InvalidOperationException) {
             return Conflict();
         }
-
         return Ok(item);
     }
 
@@ -118,13 +108,11 @@ public class ItemsController(IItemService service) : ControllerBase
         if (item == null)
             return NotFound();
 
-        try
-        {
+        try {
             item.Return();
             await service.UpdateAsync(item);
         }
-        catch (InvalidOperationException)
-        {
+        catch (InvalidOperationException) {
             return Conflict();
         }
         return Ok(item);
@@ -143,12 +131,10 @@ public class ItemsController(IItemService service) : ControllerBase
         if (item == null)
             return NotFound();
 
-        try
-        {
+        try {
             await service.DeleteAsync(item);
         }
-        catch (InvalidOperationException)
-        {
+        catch (InvalidOperationException) {
             return Conflict();
         }
         return NoContent();

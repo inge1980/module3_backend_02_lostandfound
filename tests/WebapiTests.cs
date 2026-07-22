@@ -108,6 +108,43 @@ public class WebapiTests
     }
 
     [Fact]
+    public async Task Return_claimed_item_returns_200()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var item = CreateClaimedItem();
+
+        await repository.AddAsync(item);
+
+        var result = await controller.Return(item.Id);
+
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task Claim_available_item_returns_200()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var item = CreateAvailableItem();
+
+        await repository.AddAsync(item);
+
+        var request = new ClaimItemRequest
+        {
+            ClaimedBy = "Ola"
+        };
+
+        var result = await controller.Claim(item.Id, request);
+
+        Assert.IsType<OkObjectResult>(result);
+    }
+
+    [Fact]
     public async Task Create_item_returns_201()
     {
         var repository = new InMemoryItemRepository();
@@ -125,22 +162,6 @@ public class WebapiTests
     }
 
     [Fact]
-    public async Task Return_claimed_item_returns_200()
-    {
-        var repository = new InMemoryItemRepository();
-        var service = new ItemService(repository);
-        var controller = new ItemsController(service);
-
-        var item = CreateClaimedItem();
-
-        await repository.AddAsync(item);
-
-        var result = await controller.Return(item.Id);
-
-        Assert.IsType<OkObjectResult>(result);
-    }
-
-    [Fact]
     public async Task Delete_available_item_returns_204()
     {
         var repository = new InMemoryItemRepository();
@@ -153,6 +174,58 @@ public class WebapiTests
     }
 
     [Fact]
+    public async Task Create_item_without_title_returns_400()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var request = new CreateItemRequest
+        {
+            Title = "",
+            Description = "No title",
+            Category = "Other",
+            FoundLocation = "Park"
+        };
+
+        var result = await controller.Create(request);
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task Create_item_with_title_longer_than_80_characters_returns_400()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var request = new CreateItemRequest
+        {
+            Title = new string('A', 81),
+            Description = "Too long title",
+            Category = "Other",
+            FoundLocation = "Park"
+        };
+
+        var result = await controller.Create(request);
+
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task Get_missing_item_returns_404()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var result = await controller.GetById(Guid.NewGuid());
+
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
     public async Task Delete_claimed_item_returns_409()
     {
         var repository = new InMemoryItemRepository();
@@ -161,6 +234,43 @@ public class WebapiTests
         var item = CreateClaimedItem();
         await repository.AddAsync(item);
         var result = await controller.Delete(item.Id);
+        Assert.IsType<ConflictResult>(result);
+    }
+
+    [Fact]
+    public async Task Claim_claimed_item_returns_409()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var item = CreateClaimedItem();
+
+        await repository.AddAsync(item);
+
+        var request = new ClaimItemRequest
+        {
+            ClaimedBy = "Per"
+        };
+
+        var result = await controller.Claim(item.Id, request);
+
+        Assert.IsType<ConflictResult>(result);
+    }
+
+    [Fact]
+    public async Task Return_available_item_returns_409()
+    {
+        var repository = new InMemoryItemRepository();
+        var service = new ItemService(repository);
+        var controller = new ItemsController(service);
+
+        var item = CreateAvailableItem();
+
+        await repository.AddAsync(item);
+
+        var result = await controller.Return(item.Id);
+
         Assert.IsType<ConflictResult>(result);
     }
 
